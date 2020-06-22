@@ -32,14 +32,14 @@ namespace CretaceousPark.Controllers
     }
 
     // POST api/animals
-    [HttpPost]
+    [HttpPost /*, ActionName("PostSingle") */]
     public void Post([FromBody] Animal animal)
     {
       _db.Animals.Add(animal);
       _db.SaveChanges();
     }
 
-    // [HttpPost]
+    // [HttpPost, ActionName("PostArray")]
     // public void Post([FromBody] Animal[] animals)
     // {
     //     foreach (Animal animal in animals)
@@ -50,7 +50,6 @@ namespace CretaceousPark.Controllers
     // }
 
     //PUT api/animals/{id}
-    
     [HttpPut("{id}")]
     public void Put(int id, [FromBody] Animal animal)
     {
@@ -67,6 +66,5 @@ namespace CretaceousPark.Controllers
       _db.Animals.Remove(animalToDelete);
       _db.SaveChanges();
     }
-
   }
 }
