@@ -1,8 +1,8 @@
 using CretaceousPark.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace CretaceousPark.Controllers
 {
@@ -19,9 +19,15 @@ namespace CretaceousPark.Controllers
 
     // GET api/animals
     [HttpGet]
-    public ActionResult<IEnumerable<Animal>> Get()
+    public ActionResult<IEnumerable<Animal>> Get(string species)
     {
-      return _db.Animals.ToList();
+      var query = _db.Animals.AsQueryable();
+      if (species != null)
+      {
+        query = query.Where(entry => entry.Species == species);
+      }
+
+      return query.ToList();
     }
 
     // GET api/animals/{id}
@@ -32,7 +38,7 @@ namespace CretaceousPark.Controllers
     }
 
     // POST api/animals
-    [HttpPost /*, ActionName("PostSingle") */]
+    [HttpPost /*, ActionName("PostSingle") */ ]
     public void Post([FromBody] Animal animal)
     {
       _db.Animals.Add(animal);
@@ -55,9 +61,9 @@ namespace CretaceousPark.Controllers
     {
       animal.AnimalId = id;
       _db.Entry(animal).State = EntityState.Modified;
-      _db.SaveChanges();  
+      _db.SaveChanges();
     }
-    
+
     //DELETE api/animals/{id}
     [HttpDelete("{id}")]
     public void Delete(int id)
